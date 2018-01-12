@@ -51,6 +51,7 @@ wav_file.setparams((nchannels, sampwidth, int(sampling_rate), nframes, comptype,
 
 for s in sine_noise:
    wav_file.writeframes(struct.pack('h', int(s*amplitude)))
+   
 
 
 #Convert them to numpy arrays
@@ -91,9 +92,12 @@ plt.show()
 
 
 data_fft = np.fft.fft(combined_signal)
+
+print data_fft
  
 freq = (np.abs(data_fft[:len(data_fft)]))
 
+print freq
 
 
 plt.plot(freq)

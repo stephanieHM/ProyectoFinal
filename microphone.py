@@ -45,9 +45,7 @@ class Microphone:
             print rms_value
             if (rms_value >= THRESHOLD):
                 didDetect = True
-		starting_point = time.time()
-		print ("time is...")		
-		print starting_point
+
                 print "Listening...\n"
                 break
         if not didDetect:
@@ -68,24 +66,37 @@ class Microphone:
         wf.setsampwidth(p.get_sample_size(pyaudio.paInt16))
         wf.setframerate(RATE)
         wf.writeframes(data)
+	print wf
         wf.close()
         return True
 
 if __name__ == '__main__':
     mic = Microphone()
-    while True:
+    flag=True
+    while flag:
         if  mic.passiveListen('ok Google'):
             fs, data = wavfile.read('audio.wav')
             L = len(data)
             c = np.fft.fft(data) # create a list of complex number
             freq = np.fft.fftfreq(L)
+
+	    freq2 = (np.abs(c[:len(c)]))
+            plt.plot(freq2[:500])
+	    plt.show()
+
             #freq = np.linspace(0, 1/(2L), L/2)
             print ("frecuencia 1 ")
 	    print freq
+
+	
             freq_in_hertz = abs(freq * fs)
 	    print freq_in_hertz
-            plt.plot(freq_in_hertz, abs(c))
+	    print len(freq_in_hertz)
+	    print abs(c)
+	    print len(abs(c))
+
+            plt.plot(freq_in_hertz[:500], abs(c)[:500])
             plt.show()
-	    final_point = time.time()
-	    print ("time final is...")		
-	    print final_point
+	    
+	    flag=False
+
