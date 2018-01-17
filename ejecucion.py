@@ -4,7 +4,7 @@ import subprocess
 
 
 # Iterable con las rutas de los scripts
-scripts_paths = ("/home/stephanie/ProyectoFinal/noise.py","/home/stephanie/ProyectoFinal/sound_sin.py","/home/stephanie/ProyectoFinal/whitenoise.wav")
+scripts_paths = ("/home/stephanie/ProyectoFinal/a1.py","/home/stephanie/ProyectoFinal/guarda.py","/home/stephanie/ProyectoFinal/leds.py")
 
 
 # Creamos cada proceso    
