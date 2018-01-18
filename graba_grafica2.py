@@ -7,6 +7,7 @@ try:
 except ImportError:
     raise ImportError('Faltan modulos externos que instalar')
 import wave
+import struct
 import time
 
 SEGUNDOS = 10
@@ -48,17 +49,26 @@ stream = p.open(format=FORMAT,
 inicio=time.time()
 def generador():
     i = generador.i
-    while i < range(0, int(RATE / CHUNK * (SEGUNDOS))):
+    t=0
+    characFreq = []
+    while t < 5:# i < range(0, int(RATE / CHUNK * (SEGUNDOS))):
         data = stream.read(CHUNK)
 	t=time.time()-inicio
         audio = np.fromstring(data, np.int16)
         tiempo = np.arange((CHUNK * i), audio.shape[0] + (CHUNK * i))/float(RATE)
         i += 1
-	audioftt=(np.abs(np.fft.fft(audio)[:len(np.fft.fft(audio))]))
-        print len(audio) #44100/4096=10.76 
-	print audioftt
-	
+	audioftt = np.fft.fft(audio)
+	freqs = np.fft.fftfreq(len(audioftt))
+	idx = np.argmax(np.abs(audioftt))
+	freq = freqs[idx]
+	freq_in_hertz = abs(freq * RATE)
+	# print(freq_in_hertz)
+        # print len(audio) #44100/4096=10.76 
+	# print (freq.max(), freq.max())
         yield tiempo, audio, audioftt
+	characFreq.append(freq_in_hertz)
+    print(characFreq)
+    print len(characFreq)
 generador.i = 0
 
 def animacion(data):
