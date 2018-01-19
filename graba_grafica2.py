@@ -46,12 +46,18 @@ stream = p.open(format=FORMAT,
                         rate=RATE,
                         input=True,
                         frames_per_buffer=CHUNK)
+
+
+archivo = open("frecuencias.txt", "w")
 inicio=time.time()
+
 def generador():
     i = generador.i
     t=0
     characFreq = []
+    j=0
     while t < 5:# i < range(0, int(RATE / CHUNK * (SEGUNDOS))):
+	
         data = stream.read(CHUNK)
 	t=time.time()-inicio
         audio = np.fromstring(data, np.int16)
@@ -62,11 +68,23 @@ def generador():
 	idx = np.argmax(np.abs(audioftt))
 	freq = freqs[idx]
 	freq_in_hertz = abs(freq * RATE)
+	print freq_in_hertz
 	# print(freq_in_hertz)
         # print len(audio) #44100/4096=10.76 
 	# print (freq.max(), freq.max())
-        yield tiempo, audio, audioftt
-	characFreq.append(freq_in_hertz)
+	if freq_in_hertz <= 20:
+		archivo.write("a\n")
+		print("a")
+	else: 
+		if freq_in_hertz <= 40:
+			archivo.write("v\n")
+			print("v")	
+		else:
+			archivo.write("r\n")
+			print("r") 
+        characFreq.append(freq_in_hertz)
+	yield tiempo, audio, audioftt
+
     print(characFreq)
     print len(characFreq)
 generador.i = 0
@@ -94,3 +112,4 @@ def animacion(data):
 ani = animation.FuncAnimation(fig, animacion, generador, blit=True,
 interval=50, repeat=False)
 plt.show()
+archivo.close()
