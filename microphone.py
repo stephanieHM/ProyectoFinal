@@ -61,7 +61,7 @@ class Microphone:
         data = ''.join(all)
         stream.stop_stream()
         stream.close()
-        wf = wave.open('audio.wav', 'wb') #Archivo wav donde se procesa el audio grabado
+        wf = wave.open('voz.wav', 'wb') #Archivo wav donde se procesa el audio grabado
         wf.setnchannels(1)
         wf.setsampwidth(p.get_sample_size(pyaudio.paInt16))
         wf.setframerate(RATE)
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     flag=True
     while flag:
         if  mic.passiveListen('ok Google'):
-            fs, data = wavfile.read('audio.wav')
+            fs, data = wavfile.read('voz.wav')
             L = len(data)
             c = np.fft.fft(data) # create a list of complex number
             freq = np.fft.fftfreq(L)
